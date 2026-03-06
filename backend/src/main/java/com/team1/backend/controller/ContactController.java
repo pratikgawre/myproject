@@ -11,19 +11,21 @@ import java.time.Instant;
 
 @RestController
 @RequestMapping("/api/contact")
-@CrossOrigin(origins = "*")
 public class ContactController {
 
     private final ContactVerificationService verificationService;
     private final SendGridEmailService emailService;
     private final String receiverEmail;
+    private final String frontendBaseUrl;
 
     public ContactController(ContactVerificationService verificationService,
                              SendGridEmailService emailService,
-                             @Value("${contact.receiver.email:}") String receiverEmail) {
+                             @Value("${contact.receiver.email:}") String receiverEmail,
+                             @Value("${frontend.base-url:http://localhost:5173}") String frontendBaseUrl) {
         this.verificationService = verificationService;
         this.emailService = emailService;
         this.receiverEmail = receiverEmail;
+        this.frontendBaseUrl = frontendBaseUrl == null ? "http://localhost:5173" : frontendBaseUrl.replaceAll("/+$", "");
     }
 
     @PostMapping("/send-verification")
@@ -35,7 +37,7 @@ public class ContactController {
         String code = verificationService.generateCode(email);
         String subject = "Your verification code";
         // Include a convenient verification link that opens the frontend and triggers verification
-        String frontendLink = "http://localhost:5173/contact-sales?email=" + java.net.URLEncoder.encode(email, java.nio.charset.StandardCharsets.UTF_8) + "&code=" + code;
+        String frontendLink = frontendBaseUrl + "/contact-sales?email=" + java.net.URLEncoder.encode(email, java.nio.charset.StandardCharsets.UTF_8) + "&code=" + code;
         String html = "<div style=\"font-family:Arial,sans-serif;color:#0f172a;\">"
                 + "<h2>Verify your email</h2>"
                 + "<p>Your verification code is <strong>"+code+"</strong>. It expires in 10 minutes.</p>"
