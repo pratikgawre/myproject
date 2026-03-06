@@ -4,13 +4,14 @@ import { FiX, FiUser, FiMail, FiPhone, FiEdit3, FiServer } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
 
 export default function ContactSales(){
+  const API_BASE_ROOT = import.meta.env.VITE_API_BASE || 'http://localhost:8080'
+  const API_BASE = API_BASE_ROOT + '/api/contact'
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [country, setCountry] = useState('+91')
   const [message, setMessage] = useState('')
   const navigate = useNavigate()
-  const API_BASE = 'http://localhost:8080/api/contact'
 
   const [verificationSent, setVerificationSent] = useState(false)
   const [verificationCode, setVerificationCode] = useState('')

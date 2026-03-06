@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Auth.css'
 
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8080'
+
 export default function ForgotPassword(){
   const [email,setEmail] = useState('')
   const [error,setError] = useState('')
@@ -11,7 +13,7 @@ export default function ForgotPassword(){
     e.preventDefault()
     setError('')
     try{
-      const res = await fetch('http://localhost:8080/api/auth/forgot-password',{
+      const res = await fetch(`${API_BASE}/api/auth/forgot-password`,{
         method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})
       })
       const body = await res.json()

@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Auth.css'
 
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8080'
+
 export default function ResetPassword(){
   const [code,setCode] = useState(['','','','','',''])
   const [newPassword,setNewPassword] = useState('')
@@ -27,7 +29,7 @@ export default function ResetPassword(){
     if(joined.length!==6) return setError('Enter full 6-digit code')
     if(newPassword.length<8) return setError('Password must be at least 8 characters')
     try{
-      const res = await fetch('http://localhost:8080/api/auth/reset-password',{
+      const res = await fetch(`${API_BASE}/api/auth/reset-password`,{
         method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId,code:joined,newPassword})
       })
       const body = await res.json()

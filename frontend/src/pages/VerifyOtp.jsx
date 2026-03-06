@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Auth.css'
 
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8080'
+
 export default function VerifyOtp() {
   const [code, setCode] = useState(['', '', '', '', '', ''])
   const [userId, setUserId] = useState(localStorage.getItem('pendingUserId') || '')
@@ -30,7 +32,7 @@ export default function VerifyOtp() {
     const joined = code.join('')
     if (joined.length !== 6) return setError('Enter full 6-digit code')
     try {
-      const res = await fetch('http://localhost:8080/api/auth/verify-otp', {
+      const res = await fetch(`${API_BASE}/api/auth/verify-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: Number(userId), code: joined })
@@ -59,7 +61,7 @@ export default function VerifyOtp() {
   async function resend() {
     setError('')
     try {
-      const res = await fetch('http://localhost:8080/api/auth/resend-otp', {
+      const res = await fetch(`${API_BASE}/api/auth/resend-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: Number(userId), code: '' })

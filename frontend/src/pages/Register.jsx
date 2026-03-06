@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Auth.css'
 
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8080'
+
 export default function Register() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -32,7 +34,7 @@ export default function Register() {
     if (missing.length) return setError('Password must contain at least: ' + missing.join(', '))
     if (!role) return setError('Please select a role')
     try {
-      const res = await fetch('http://localhost:8080/api/auth/register', {
+      const res = await fetch(`${API_BASE}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email: lower, password, role }),
